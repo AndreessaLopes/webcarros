@@ -9,7 +9,7 @@ export function Home() {
           placeholder="Digite o nome do carro"
           type="text"
         />
-        <button className="bg-blue-500 h-9 px-8 rounded-lg text-white font-medium text-lg">
+        <button className="bg-blue-900 h-9 px-8 rounded-lg text-white font-medium text-lg">
           Buscar
         </button>
       </section>

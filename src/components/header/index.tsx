@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logoImg from "../../assets/logo.png";
+import logoImg from "../../assets/logo.svg";
 import { FiUser, FiLogIn } from "react-icons/fi";
 export default function Header() {
   const signed = false;
