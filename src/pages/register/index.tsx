@@ -1,10 +1,13 @@
 import logoImg from "../../assets/logo.svg";
 import { Container } from "../../components/container";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../../components/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { auth } from "../../services/firebaseConnection";
+import { createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { useEffect } from "react";
 
 const schema = z.object({
   name: z.string().nonempty("Nome é obrigatório"),
@@ -17,6 +20,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 export function Register() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -26,8 +30,25 @@ export function Register() {
     mode: "onChange",
   });
 
-  function onsubmit(data: FormData) {
-    console.log(data);
+  useEffect(() => {
+      async function handleLogout() {
+        await signOut(auth);
+      }
+      handleLogout();
+    }, []);
+
+  async function onsubmit(data: FormData) {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then(async (user) => {
+        await updateProfile(user.user, {
+          displayName: data.name,
+        });
+        console.log("Usuário cadastrado com sucesso!");
+        navigate("/dashboard", { replace: true });
+      })
+      .catch((error) => {
+        console.log("Erro ao cadastrar usuário:", error.code);
+      });
   }
 
   return (
@@ -74,7 +95,7 @@ export function Register() {
             type="submit"
             className="bg-blue-900 w-full text-white rounded-md h-10 font-medium"
           >
-            Acessar
+            Cadastrar
           </button>
         </form>
         <Link to="/login" className="w-full max-w-xl flex justify-center">
