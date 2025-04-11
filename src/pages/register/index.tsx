@@ -6,8 +6,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { auth } from "../../services/firebaseConnection";
-import { createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import { useEffect } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { useEffect, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const schema = z.object({
   name: z.string().nonempty("Nome é obrigatório"),
@@ -20,6 +25,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 export function Register() {
+  const { handleInfoUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const {
     register,
@@ -31,17 +37,22 @@ export function Register() {
   });
 
   useEffect(() => {
-      async function handleLogout() {
-        await signOut(auth);
-      }
-      handleLogout();
-    }, []);
+    async function handleLogout() {
+      await signOut(auth);
+    }
+    handleLogout();
+  }, []);
 
   async function onsubmit(data: FormData) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then(async (user) => {
         await updateProfile(user.user, {
           displayName: data.name,
+        });
+        handleInfoUser({
+          uid: user.user.uid,
+          name: data.name,
+          email: data.email,
         });
         console.log("Usuário cadastrado com sucesso!");
         navigate("/dashboard", { replace: true });
