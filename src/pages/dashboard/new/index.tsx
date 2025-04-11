@@ -1,12 +1,30 @@
 import { Container } from "../../../components/container";
 import { DashboardHeader } from "../../../components/panelheader";
-import { FiUpload } from "react-icons/fi";
+import { FiUpload, FiTrash } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { Input } from "../../../components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChangeEvent, useState, useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { v4 as uuidV4 } from "uuid";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../../services/firebaseConnection";
+
+interface ImageItemProps {
+  uid: string;
+  url: string;
+  name: string;
+  previewUrl: string;
+}
 
 export function New() {
+  const [carImages, setCarImages] = useState<ImageItemProps[]>([]);
   const schema = z.object({
     name: z.string().nonempty("Nome é obrigatório"),
     model: z.string().nonempty("Modelo é obrigatório"),
@@ -34,10 +52,56 @@ export function New() {
     mode: "onChange",
   });
 
+  const { user } = useContext(AuthContext);
+
+  async function handleFile(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type === "image/jpeg" || file.type === "image/png") {
+        await handleUpload(file);
+      } else {
+        alert("Formato de imagem inválido. Aceitamos apenas JPEG e PNG.");
+        return;
+      }
+    }
+  }
+
+  async function handleUpload(file: File) {
+    if (!user?.uid) {
+      return;
+    }
+    const currentUid = user?.uid;
+    const fileName = uuidV4();
+
+    const storageRef = ref(storage, `images/${currentUid}/${fileName}`);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        const imageItem = {
+          uid: currentUid,
+          url: downloadURL,
+          name: fileName,
+          previewUrl: URL.createObjectURL(file),
+        };
+        setCarImages((images) => [...images, imageItem]);
+      });
+    });
+  }
+
   async function onSubmit(data: FormData) {
     console.log(data);
     // Aqui você pode fazer a lógica para enviar os dados para o servidor ou fazer o que precisar com eles
     reset(); // Limpa os campos após o envio
+  }
+
+  async function handleDeleteImage(item: ImageItemProps) {
+    const imagePath = `images/${item.uid}/${item.name}`;
+    const storageRef = ref(storage, imagePath);
+    try {
+      await deleteObject(storageRef);
+      setCarImages(carImages.filter((image) => image.url !== item.url));
+    } catch (error) {
+      console.log(error + " erro ao deletar imagem");
+    }
   }
 
   return (
@@ -54,9 +118,29 @@ export function New() {
               type="file"
               accept="image/*"
               className="opacity-0 cursor-pointer"
+              onChange={handleFile}
             />
           </div>
         </button>
+
+        {carImages.map((item) => (
+          <div
+            key={item.name}
+            className="w-full h-32 flex items-center justify-center relative"
+          >
+            <button
+              className="absolute cursor-pointer"
+              onClick={() => handleDeleteImage(item)}
+            >
+              <FiTrash size={28} color="#FFF" />
+            </button>
+            <img
+              src={item.previewUrl}
+              alt="Foto do carro"
+              className="rounded-lg w-full h-32 object-cover"
+            />
+          </div>
+        ))}
       </div>
 
       <div className="w-full bg-white p-3 flex flex-col rounded-lg sm:flex-row items-center gap-2 mt-2">
@@ -109,9 +193,7 @@ export function New() {
 
           <div className="flex w-full mb-3 flex-rol items-center gap-4">
             <div className="w-full">
-              <p className="mb-2 font-medium">
-                Telefone/Whatsapp para contato
-              </p>
+              <p className="mb-2 font-medium">Telefone/Whatsapp para contato</p>
               <Input
                 type="text"
                 placeholder="Ex: 011999999999"
