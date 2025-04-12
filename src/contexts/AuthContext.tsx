@@ -33,12 +33,14 @@ function AuthProvider({ children }: AuthProviderProps) {
           name: user?.displayName,
           email: user?.email,
         });
+
         setLoadingAuth(false);
       } else {
         setUser(null);
         setLoadingAuth(false);
       }
     });
+
     return () => {
       unsub();
     };
@@ -54,7 +56,12 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ signed: !!user, loadingAuth, handleInfoUser, user }}
+      value={{
+        signed: !!user,
+        loadingAuth,
+        handleInfoUser,
+        user,
+      }}
     >
       {children}
     </AuthContext.Provider>
