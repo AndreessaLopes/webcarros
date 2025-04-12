@@ -1,7 +1,7 @@
 import { Container } from "../../../components/container";
 import { DashboardHeader } from "../../../components/panelheader";
 import { FiUpload, FiTrash } from "react-icons/fi";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { Input } from "../../../components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +14,8 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
-import { storage } from "../../../services/firebaseConnection";
+import { storage, db } from "../../../services/firebaseConnection";
+import { addDoc, collection } from "firebase/firestore";
 
 interface ImageItemProps {
   uid: string;
@@ -88,9 +89,39 @@ export function New() {
   }
 
   async function onSubmit(data: FormData) {
-    console.log(data);
-    // Aqui você pode fazer a lógica para enviar os dados para o servidor ou fazer o que precisar com eles
-    reset(); // Limpa os campos após o envio
+    if (carImages.length === 0) {
+      alert("Você precisa enviar pelo menos uma imagem do carro.");
+      return;
+    }
+    const carListImages = carImages.map((item) => {
+      return {
+        uid: item.uid,
+        name: item.name,
+        url: item.url,
+      };
+    });
+    addDoc(collection(db, "cars"), {
+      name: data.name,
+      model: data.model,
+      year: data.year,
+      km: data.km,
+      price: data.price,
+      city: data.city,
+      whatsapp: data.whatsapp,
+      description: data.description,
+      owner: user?.name,
+      uid: user?.uid,
+      createdAt: new Date(),
+      images: carListImages,
+    })
+      .then(() => {
+        reset(); // Limpa os campos após o envio
+        setCarImages([]); // Limpa as imagens após o envio
+        console.log("Carro cadastrado com sucesso!");
+      })
+      .catch((error) => {
+        console.log("Erro ao cadastrar carro: ", error);
+      });
   }
 
   async function handleDeleteImage(item: ImageItemProps) {
