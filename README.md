@@ -1,54 +1,66 @@
-# React + TypeScript + Vite
+# 🚗 WebCarros
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web inspirada no WebMotors, desenvolvida com **React** e **Firebase**, que permite cadastro de usuários, publicação de veículos, edição, remoção e visualização dos anúncios.
 
-Currently, two official plugins are available:
+## 🔧 Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React.js** – Interface responsiva e dinâmica
+- **Firebase Authentication** – Cadastro e login de usuários
+- **Firebase Firestore** – Armazenamento de dados (CRUD de veículos)
+- **Firebase Storage** – Upload de imagens dos veículos
+- **React Router Dom** – Navegação entre páginas
+- **Tailwind CSS** *(ou outra, se aplicável)* – Estilização do frontend
 
-## Expanding the ESLint configuration
+## ✨ Funcionalidades
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Cadastro e login de usuários
+- Cadastro, edição, exclusão e listagem de veículos
+- Upload de imagens para cada veículo
+- Visualização dos anúncios públicos
+- Interface intuitiva e responsiva
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🖼️ Imagens do Projeto
+
+*(Adicione aqui capturas de tela do sistema)*  
+Ex: Página de login | Página de cadastro de carro | Página de listagem de veículos
+
+## 🚀 Como Executar o Projeto
+
+```bash
+# Clone o repositório
+git clone https://github.com/AndreessaLopes/webcarros
+
+# Acesse o diretório
+cd webcarros
+
+# Instale as dependências
+npm install
+
+# Inicie o projeto
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+💡 Certifique-se de criar um arquivo `.env` com suas credenciais do Firebase:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
 ```
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+...
+```
+
+## 📂 Estrutura de Pastas
+
+```
+src/
+│
+├── components/       # Componentes reutilizáveis (cards, inputs, etc)
+├── pages/            # Páginas do sistema (Login, Home, Dashboard)
+├── services/         # Configurações do Firebase
+├── hooks/            # Hooks personalizados
+└── App.jsx           # Roteamento principal
+```
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Sinta-se à vontade para usar e modificar.
