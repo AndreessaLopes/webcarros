@@ -9,7 +9,7 @@ Aplicação web inspirada no WebMotors, desenvolvida com **React** e **Firebase*
 - **Firebase Firestore** – Armazenamento de dados (CRUD de veículos)
 - **Firebase Storage** – Upload de imagens dos veículos
 - **React Router Dom** – Navegação entre páginas
-- **Tailwind CSS** *(ou outra, se aplicável)* – Estilização do frontend
+- **Tailwind CSS** _(ou outra, se aplicável)_ – Estilização do frontend
 
 ## ✨ Funcionalidades
 
@@ -21,8 +21,17 @@ Aplicação web inspirada no WebMotors, desenvolvida com **React** e **Firebase*
 
 ## 🖼️ Imagens do Projeto
 
-*(Adicione aqui capturas de tela do sistema)*  
-Ex: Página de login | Página de cadastro de carro | Página de listagem de veículos
+### 🔐 Tela de Login
+
+![Tela de Login](./assets/login.png)
+
+### 🚘 Cadastro de Veículo
+
+![Cadastro de Veículo](./assets/cadastro-veiculo.png)
+
+### 📃 Lista de Veículos
+
+![Lista de Veículos](./assets/lista-veiculos.png)
 
 ## 🚀 Como Executar o Projeto
 
