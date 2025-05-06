@@ -23,15 +23,15 @@ Aplicação web inspirada no WebMotors, desenvolvida com **React** e **Firebase*
 
 ### 🔐 Tela de Login
 
-![Tela de Login](./assets/login.png)
+![Tela de Login](./images/login.png)
 
 ### 🚘 Cadastro de Veículo
 
-![Cadastro de Veículo](./assets/cadastro-veiculo.png)
+![Cadastro de Veículo](./images/cadastro-veiculo.png)
 
 ### 📃 Lista de Veículos
 
-![Lista de Veículos](./assets/lista-veiculos.png)
+![Lista de Veículos](./images/lista-veiculos.png)
 
 ## 🚀 Como Executar o Projeto
 
